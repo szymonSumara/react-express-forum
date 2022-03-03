@@ -1,0 +1,5 @@
+{
+    "port":3000,
+    "connection-string" : "mongodb+srv://test:test@cluster0.3qec3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "token-key" : "1234"
+}

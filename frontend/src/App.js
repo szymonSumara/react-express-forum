@@ -11,6 +11,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import Logout from './Components/Logout';
 import PostPreview from './Components/postPreviev';
+import EditPostForm from './Components/editPost';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const isLogged = auth.getLoggedUser() ? true : false;
@@ -39,9 +41,8 @@ function App() {
                <Posts></Posts>
             </>
             }></Route>
-            <Route path="/post/:id" element={
-              <PostPreview />
-            }></Route>
+            <Route path="/post/:id" element={<PostPreview />}></Route>
+            <Route path="/editPost/:id" element={<EditPostForm />}></Route>
             <Route path="/logout" element={<Logout/>}/>
             <Route index element={ <>
               <CreateNewPostForm/>
@@ -67,7 +68,8 @@ function App() {
       </div>
 
       }
-      {/* <ToastContainer /> */}
+       <ToastContainer /> 
+
     </BrowserRouter>
 
   );

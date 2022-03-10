@@ -74,6 +74,29 @@ const del = async ( path ,body) => {
     } 
 }
 
+const put = async ( path ,body) => {
+  const response = await fetch(serverUrl + path, {
+      method: 'PUT', 
+      body:JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': token,
+      },
+    });
+
+    if(response.ok){
+      toast.success(`POST ${path}`)
+      const data =  response.json();
+      console.log(data);
+      return data;
+    } 
+    else{
+      const text = await response.text();
+      toast.error(`POST ${path} \n ${text}`);
+      return null;
+    } 
+}
+
 
 function optionsObjectToString(options){
   
@@ -90,6 +113,7 @@ function optionsObjectToString(options){
 
 const http = {
   get,
+  put,
   post,
   setToken,
   delete:del,

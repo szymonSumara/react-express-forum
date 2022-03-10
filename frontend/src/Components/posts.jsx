@@ -22,7 +22,7 @@ function Posts() {
         :    
         posts.map((post,index) => 
             {
-               
+                console.log(post)
                 return <Post key={index} id={post.id} author={post.nick} title={post.title} text={post.text} ></Post>})}  
 
     </>);

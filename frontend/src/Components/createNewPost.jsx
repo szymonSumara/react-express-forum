@@ -7,11 +7,11 @@ import * as  posts from '../Services/posts'
 function CreateNewPostForm() {
     
     
-    const [topic, setTopic] = useState();
+    const [title, setTitle] = useState();
     const [text, setText] = useState();
     
-    const updateTopic = (e) => {
-        setTopic(e.target.value);
+    const updateTitle = (e) => {
+        setTitle(e.target.value);
     }
 
     const updateText = (e) => {
@@ -21,7 +21,7 @@ function CreateNewPostForm() {
 
     const submit = () => {
         const user = auth.getLoggedUser()
-        posts.addPost({topic, text});        
+        posts.addPost({title, text});        
     }
 
 
@@ -31,8 +31,8 @@ function CreateNewPostForm() {
         <InputGroup  className="mt-3 mb-3 ">
         <FormControl
             placeholder="topic"
-            value={topic}
-            onChange={updateTopic}
+            value={title}
+            onChange={updateTitle}
         />
         </InputGroup>
         <InputGroup className="mb-3">

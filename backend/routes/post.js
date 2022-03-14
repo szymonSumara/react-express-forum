@@ -4,12 +4,14 @@ const {validatePost, Post }= require('../models/post');
 const auth = require('../middleware/auth');
 const {Account} = require('../models/account');
 const {Comment} = require('../models/comment');
+const { Reaction } = require("../models/reaction");
 
 router.get( '/',async  ( request, response ) => {
     console.log("Get all posts");
 
     const posts = await Post.find();
     const users = await Account.find();
+    const reactions = await Reaction.find();
 
 
     setTimeout( () => { response.send(posts.map( post => {
@@ -17,8 +19,11 @@ router.get( '/',async  ( request, response ) => {
             id: post._id,
             title: post.title,
             text: post.text,
+            reactionsList : reactions
+                .filter( r =>  post._id?.toString() == r.postId?.toString())
+                .map(r => {return { userId : r.userId, positive: r.positive}}),
+            reactions: post.reactions,
             nick : users.find( user => {
-                console.log(post.userId, user._id,post.userId?.toString() == user._id?.toString() );
                 return post.userId?.toString() == user._id?.toString() })?.nick
         }
     }));},300)
@@ -38,6 +43,7 @@ router.get( '/:id', async ( request, response ) => {
         title: post.title,
         text: post.text,
         author : users.find((u) => u._id?.toString() === post.userId?.toString())?.nick,
+        reactions: post.reactions,
         comments : comments.map( (com) => {
             return {
                 text : com.text,

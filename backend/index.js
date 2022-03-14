@@ -20,6 +20,8 @@ app.use("/api/post", require('./routes/post'));
 app.use("/api/account", require('./routes/account'));
 app.use("/api/login", require('./routes/loggin'));
 app.use("/api/comment", require('./routes/comment'))
+app.use("/api/reaction", require('./routes/reaction'))
+
 app.listen(3000, () => {
     console.log("Start listen on port 3000");
 })

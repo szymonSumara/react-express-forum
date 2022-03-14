@@ -15,6 +15,16 @@ const postShema = new mongoose.Schema({
     type:String,
 
    },
+   reactions : {
+        positive:{
+            type:Number,
+            default:0
+        },
+        negative:{
+            type:Number,
+            default:0
+        }      
+    },
    date : {
     type:mongoose.Date,
     default:new Date(),   }

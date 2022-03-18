@@ -1,6 +1,11 @@
 import http from "./http";
 
-export  async function getPosts(){
+export  async function getPosts(page, limit, category){
+    if(page && limit && category)
+    return http.get(`/api/post?page=${page}&limit=${limit}&category=${category}`);
+    if(page && limit)
+    return http.get(`/api/post?page=${page}&limit=${limit}`);
+
     return http.get('/api/post');
 }
 

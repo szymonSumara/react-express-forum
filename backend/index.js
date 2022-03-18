@@ -1,7 +1,6 @@
 const express = require('express');
 const config = require('config');
 const mongoose = require('mongoose');
-const bp = require('body-parser');
 const cors = require('cors');
 
 const app = express();
@@ -21,6 +20,8 @@ app.use("/api/account", require('./routes/account'));
 app.use("/api/login", require('./routes/loggin'));
 app.use("/api/comment", require('./routes/comment'))
 app.use("/api/reaction", require('./routes/reaction'))
+app.use("/api/category", require('./routes/category'))
+
 
 app.listen(3000, () => {
     console.log("Start listen on port 3000");

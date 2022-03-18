@@ -13,7 +13,9 @@ function ForumNavBar({ userName }) {
         <NavItem>        <span className="p-3 navbar-text">
         {userName}
         </span> </NavItem>
+        <Link to="/addPost"> Add</Link>
         <NavItem>        <span className="p-3 navbar-text">
+        
         <Link to="/logout"> Logout</Link>
         </span> </NavItem>
     </Nav>

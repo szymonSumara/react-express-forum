@@ -1,37 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { BsArrowDownCircleFill,BsFillArrowUpCircleFill ,BsArrowDownCircle , BsArrowUpCircle} from "react-icons/bs";
 import * as reactionService from '../Services/reaction';
-import  auth from '../Services/auth'
+import  * as auth from '../Services/auth'
 
 function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
     
-
-
     let actualReaction = ''
     if(userReaction) actualReaction = 'positive'
     else if( userReaction !== undefined )  actualReaction = 'negative'
 
-    const [reaction, setReaction] = useState(actualReaction );
-    
+    const [ reaction, setReaction ] = useState(actualReaction );
+    const [ reactionCounts, setReactionCounts ] = useState({
+        positive: positiveCount,
+        negative: negativeCount,
+    });
 
 
     const onLike = (e) => {
-        if( reaction != 'positive'){
-            setReaction( 'positive')
+        if( reaction === 'negative'){
             reactionService.addReaction(postId, auth.getLoggedUser().id , true);
-        }else
-        setReaction( '')
+            reactionCounts.positive += 1;
+            reactionCounts.negative -= 1;
+            setReaction( 'positive')
+
+        }
+        else if(reaction === 'positive')
+        {            
+            reactionService.removeReaction(postId);
+            reactionCounts.negative -= 1;
+            setReaction('');                   
+
+        }
+        else if(reaction == ''){
+            reactionService.addReaction(postId, auth.getLoggedUser().id , true);
+            reactionCounts.positive += 1; 
+            setReaction( 'positive');                   
+        }
+
+        setReactionCounts(reactionCounts);
 
     }
 
     const onDislike = (e) => {
-        if( reaction != 'negative'){
-            setReaction( 'negative')
+        if( reaction == 'positive'){
             reactionService.addReaction(postId, auth.getLoggedUser().id , false);
-        }else{
-            setReaction( '')
+            reactionCounts.positive -= 1;
+            reactionCounts.negative += 1;
+            setReaction( 'negative')
+
         }
-           
+        else if(reaction == 'negative')
+        {            
+            reactionService.removeReaction(postId);
+            reactionCounts.negative -= 1;
+            setReaction('');                   
+
+        }
+        else if(reaction == ''){
+            reactionService.addReaction(postId, auth.getLoggedUser().id , false);
+            reactionCounts.negative += 1; 
+            setReaction( 'negative');                   
+        }
+
+        setReactionCounts(reactionCounts);
     }
 
     
@@ -39,14 +70,15 @@ function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
         <>
             <div class="row p-2">
                 <div class="col-2">
-                    <span className="p-2" >{positiveCount}</span>
+                    <span className="p-2" >{reactionCounts.positive}</span>
                     <BsFillArrowUpCircleFill />
                 </div>
                 <div class="col-2">
-                    <span className="p-2" >{negativeCount}</span>
+                    <span className="p-2" >{reactionCounts.negative}</span>
                     <BsArrowDownCircleFill />
                 </div>
                 <div class="col-6"></div>
+
                 <div class="col-1 float-right" onClick={onLike}>
                     {
                         reaction !='positive' ?

@@ -8,6 +8,9 @@ const postShema = new mongoose.Schema({
    userId : {
        type:mongoose.ObjectId
    },
+   categoryId : {
+    type:mongoose.ObjectId
+   },
    title : {
     type:String,
    },
@@ -35,6 +38,7 @@ const Post = mongoose.model('posts', postShema);
 exports.validatePost  = (post) => {
     const schema = joi.object({
         userId : joi.string().required(),
+        categoryId : joi.string().required(),
         title : joi.string().min(3).max(50).required(),
         text : joi.string().min(3).max(1024).required() ,
     })

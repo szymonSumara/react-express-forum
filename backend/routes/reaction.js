@@ -3,7 +3,6 @@ const {Reaction, validateReaction} = require('../models/reaction')
 const express = require('express');
 const router = new express.Router();
 const auth = require('../middleware/auth');
-const {Comment} = require('../models/comment')
 
 
 router.post( '' , auth, async (request, response) => {
@@ -12,11 +11,12 @@ router.post( '' , auth, async (request, response) => {
 
     const {error} = validateReaction({...body, userId : user.id });
     if(error) return response.status(400).send(error.message);
+    
     const post = await Post.findById(body.postId);
     if(!post) return response.status(400).send("post with given id doesnt exist");
 
     let reaction = await Reaction.findOne({userId: user.id, postId: body.postId})
-    console.log(reaction);
+    
     if(reaction){
         console.log(reaction.positive , body.positive)
         if(reaction.positive != body.positive){
@@ -29,15 +29,12 @@ router.post( '' , auth, async (request, response) => {
                 post.reactions.positive -= 1
             }
             
-
-            const result = await Reaction.updateOne(reaction, { positive : body.positive});
-            console.log(result);
-            const postUpdated = await Post.updateOne({_id:post._id}, {reactions: post.reactions});
-            console.log("postUpdated:", postUpdated)
+            await Reaction.updateOne({_id: reaction._id}, { positive : body.positive});
+            await post.save();
         }
 
-    
         response.status(200).send({});
+
     }else{
         reaction = new Reaction({...body, userId : user.id });
         await reaction.save();
@@ -54,52 +51,23 @@ router.post( '' , auth, async (request, response) => {
 
 })
 
-// router.get( '' , auth, async (request, response) => {
+router.delete( '' , auth, async (request, response) => {
     
-//     const {body, user} = request;
-//     console.log(body, user);
+    const {body, user} = request;
 
-//     const {error} = validateComment({...body, userId : user.id });
-//     if(error) return response.status(400).send(error);
-//     const post = await Post.findById(body.postId);
-//     if(!post) return response.status(400).send("post with given id doesnt exist");
-
-//     const reaction = new Comment({...body, userId : user.id });
-//     await reaction.save();
-//     response.status(200).send(reaction);
-// })
-
-
-// router.put( '' , auth, async (request, response) => {
-    
-//     const {body, user} = request;
-//     console.log(body, user);
-
-//     const {error} = validateComment({...body, userId : user.id });
-//     if(error) return response.status(400).send(error);
-//     const post = await Post.findById(body.postId);
-//     if(!post) return response.status(400).send("post with given id doesnt exist");
-
-//     const reaction = new Comment({...body, userId : user.id });
-//     await reaction.save();
-//     response.status(200).send(reaction);
-// })
-
-
-// router.delete( '' , auth, async (request, response) => {
-    
-//     const {body, user} = request;
-//     console.log(body, user);
-
-//     const {error} = validateComment({...body, userId : user.id });
-//     if(error) return response.status(400).send(error);
-//     const post = await Reaction.findOne({});
-//     if(!post) return response.status(400).send("post with given id doesnt exist");
-
-//     const reaction = new Comment({...body, userId : user.id });
-//     await reaction.save();
-//     response.status(200).send(reaction);
-// })
+    const reaction = await Reaction.findOneAndDelete({userId: user.id, postId: body.postId});
+    if(reaction){
+        const post = await Post.findById(body.postId);
+        if(post){
+            if(reaction.positive)
+                post.reactions.positive -= 1;
+            else
+                post.reactions.negative -= 1;
+            post.save()
+        }
+    }
+    response.status(200).send();
+})
 
 module.exports = router;
 

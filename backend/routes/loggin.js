@@ -8,27 +8,27 @@ const config = require('config');
 
 router.post('', async (request, response) => {
 
-    const {login, password } = request.body;
+    const { login, password } = request.body;
 
-    if(login === undefined ) return response.status(400).send("login");
-    if(password === undefined ) return response.status(400).send("password");
+    if(login === undefined ) 
+        return response.status(400).send("Login is required");
+    if(password === undefined ) 
+        return response.status(400).send("Password is required");
    
     const account = await Account.findOne({ login : login});
-
-    if( account === undefined ) return response.status(400).send("accound doesnt exist");
+    if( !account ) 
+        return response.status(400).send("Login or Password is invalid!!");
 
     const sha256Hasher = crypto.createHash('sha256');
     const hashedPasword = sha256Hasher.update(password).digest("hex");
-    console.log(hashedPasword, account);
-    if(account.password !== hashedPasword) return response.status(200).send("Log error");
+
+    if(account.password !== hashedPasword) return response.status(400).send("Login or Password is invalid!!!");
     else return response.status(200).send({
         "auth-token": jwt.sign({
             id : account._id,
             nick: account.nick
         }, config.get('token-key')),
     });
-
-
 })
 
 

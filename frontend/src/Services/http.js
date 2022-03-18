@@ -9,6 +9,7 @@ const setToken = (t)  => {
 }
 
 const get = async ( path, options ) => {
+  console.log(path)
     const response = await fetch(serverUrl + path + optionsObjectToString(options), {
         method: 'GET',
         headers: {
@@ -40,14 +41,17 @@ const post = async ( path ,body) => {
 
       if(response.ok){
         toast.success(`POST ${path}`)
-        const data =  response.json();
-        console.log(data);
-        return data;
+        const data = await response.json();
+     //   console.log(data);
+        return {
+          ok: true,
+          data
+        };
       } 
       else{
         const text = await response.text();
-        toast.error(`POST ${path} \n ${text}`);
-        return null;
+       // toast.error(`POST ${path} \n ${text}`);
+        return text;
       } 
 }
 
@@ -62,14 +66,14 @@ const del = async ( path ,body) => {
     });
 
     if(response.ok){
-      toast.success(`POST ${path}`)
+     // toast.success(`POST ${path}`)
       const data =  response.json();
       console.log(data);
       return data;
     } 
     else{
       const text = await response.text();
-      toast.error(`POST ${path} \n ${text}`);
+      //toast.error(`POST ${path} \n ${text}`);
       return null;
     } 
 }
@@ -85,14 +89,14 @@ const put = async ( path ,body) => {
     });
 
     if(response.ok){
-      toast.success(`POST ${path}`)
+     // toast.success(`POST ${path}`)
       const data =  response.json();
       console.log(data);
       return data;
     } 
     else{
       const text = await response.text();
-      toast.error(`POST ${path} \n ${text}`);
+    //  toast.error(`POST ${path} \n ${text}`);
       return null;
     } 
 }

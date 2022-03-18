@@ -5,29 +5,71 @@ const auth = require('../middleware/auth');
 const {Account} = require('../models/account');
 const {Comment} = require('../models/comment');
 const { Reaction } = require("../models/reaction");
+const { Category } = require("../models/category");
 
-router.get( '/',async  ( request, response ) => {
-    console.log("Get all posts");
 
-    const posts = await Post.find();
+
+
+
+const buildPosts = async () => {
+
+    const posts = await Post.find().sort({date: 'desc'});
     const users = await Account.find();
     const reactions = await Reaction.find();
+    const categories = await Category.find();
 
+    return  posts.map( post => {
 
-    setTimeout( () => { response.send(posts.map( post => {
+        const author = users.find( user => {
+            return post.userId?.toString() == user._id?.toString() 
+        })
+
         return {
             id: post._id,
             title: post.title,
             text: post.text,
+            date: post.date,
+            category: categories
+                .find( c => post.categoryId?.toString() == c.id.toString()),
             reactionsList : reactions
                 .filter( r =>  post._id?.toString() == r.postId?.toString())
                 .map(r => {return { userId : r.userId, positive: r.positive}}),
             reactions: post.reactions,
-            nick : users.find( user => {
-                return post.userId?.toString() == user._id?.toString() })?.nick
+            author : {
+                id : author._id,
+                nick : author.nick
+            }
         }
-    }));},300)
-   
+    })
+}
+
+const filterPosts = ( posts, query ) => {
+
+    let categoryFilter = query.category;
+    let page = query.page;
+    let limit = query.limit;
+
+    if(categoryFilter)posts = posts.filter( p => p.category?.name === categoryFilter )
+    
+    const beforePaggingCount = posts.length;
+
+    if(page && limit){
+        posts = posts.slice((page -1)*limit , page*limit);     
+    }
+
+    return [posts, beforePaggingCount ];
+}
+
+
+router.get( '/',async  ( request, response ) => {
+    
+    let posts = await buildPosts();
+    let beforePaggingCount = null;
+    [posts, beforePaggingCount] = filterPosts(posts, request.query);
+    console.log(beforePaggingCount);
+    setTimeout( () => { response.status(200).send({
+        totalNumber:beforePaggingCount,
+        posts:posts},200)})
 })
 
 router.get( '/:id', async ( request, response ) => {
@@ -38,18 +80,32 @@ router.get( '/:id', async ( request, response ) => {
     
     const users = await Account.find();
     const comments = await Comment.find({postId : postId})
+    const category = await Category.find();
+
+
+
+    const author = users.find( user => {
+        return post.userId?.toString() == user._id?.toString() 
+    })
 
     response.send({
+        id: post._id,
         title: post.title,
         text: post.text,
         author : users.find((u) => u._id?.toString() === post.userId?.toString())?.nick,
         reactions: post.reactions,
+        category: category.find(c => post.categoryId == c.id),
+
         comments : comments.map( (com) => {
             return {
                 text : com.text,
                 author : users.find((u) => u._id?.toString() === com.userId?.toString())?.nick
             }
-        })
+        }),
+        author : {
+            id : author._id,
+            nick : author.nick
+        }
     });
 })
 
@@ -87,7 +143,11 @@ router.post( '', auth, async  ( request, response ) => {
     const {body, user} = request;
     const errors = validatePost({...body,userId : user.id });
     if(errors.error) return response.status(400).send(errors);
+    const category = await Category.findById(body.categoryId)
+    if(!category)
+        return response.status(400).send("Category doesnt exist");
     const post = new Post({...body,userId : user.id });
+    
     await post.save();
     return response.status(200).send(post);
 })

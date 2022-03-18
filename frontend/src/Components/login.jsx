@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { FormControl, InputGroup , Form,  } from "react-bootstrap";
 import {Person, Key} from 'react-bootstrap-icons'
-import auth from '../Services/auth'
+import * as auth from '../Services/auth'
+import ErrorLabel from "./Basic/ErrorLabel";
 
 
 function LoginForm(props) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const updateLogin = (e) => {
     setLogin(e.target.value);
@@ -21,11 +23,14 @@ function LoginForm(props) {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const logged = await auth.login(login,password);
-    if(logged){
+    const result = await auth.login(login,password);
+    console.log(result)
+    if(result.ok){
      //const { state } = props.location;
      window.location =  "/";
-  }
+    }else{
+      setError(result.data);
+    }
   }
 
 
@@ -43,6 +48,7 @@ function LoginForm(props) {
             <InputGroup className="mb-3">
             <InputGroup.Text ><Key/></InputGroup.Text>
             <FormControl placeholder="password" type="password" value={password} onChange={updatePassword} />
+            <ErrorLabel value={error} />
             </InputGroup>
             <InputGroup className="mb-3">
             <Button onClick={onSubmit} className="col-12">Log</Button>

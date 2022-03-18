@@ -4,7 +4,10 @@ import { Spinner } from 'react-bootstrap';
 import Comment from './comment';
 import {getPost} from '../Services/posts'
 import AddComment from './addComment';
-import auth from '../Services/auth';
+import * as  auth from '../Services/auth';
+import Post from './post'
+import { AiFillEdit } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 function PostPreview() {
     let {id} = useParams();
@@ -23,6 +26,8 @@ useEffect( () => {
     fetchData();
 });
 
+const currentUserId = auth.getLoggedUser()?.id;
+console.log(currentUserId)
 
 
 return ( <>
@@ -30,10 +35,12 @@ return ( <>
     <Spinner animation="border" />
     :    
     <>
+   
     <div  className='text-link col-12 border mt-1 mb-1 p-2'>
+    { currentUserId === post.author.id ? <Link to={`/editPost/${post.id}`} ><AiFillEdit/></Link> : <></> }
             <h3>{post.title}</h3>
             <span>{post.text}</span>
-            <h5>{post.author}</h5>
+            <h5>{post.author.nick}</h5>
     </div>
     {post.comments.map( (com,index) => {return <Comment key={index} text={com.text} author={com.author}></Comment>})}
     <AddComment postId={id} userId={auth.getLoggedUser().id} />

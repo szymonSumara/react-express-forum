@@ -27,7 +27,7 @@ router.post('', async (request, response) => {
         "auth-token": jwt.sign({
             id : account._id,
             nick: account.nick
-        }, config.get('token-key')),
+        }, config.get('JWT_KEY')),
     });
 })
 

@@ -10,7 +10,8 @@ function CategorySelect({categories, selectedCategory, onSelect}) {
        return  <Button className="m-1" key={k} onClick={() => onSelect(c.name)} disabled={c.name == selectedCategory} > {c.name}</Button>
     })
     
-    items.push(   <Button className="m-1" key={-1} onClick={() => onSelect(null)} disabled={null == selectedCategory} >All</Button>
+    items.push(  
+       <Button className="m-1" key={-1} onClick={() => onSelect(null)} disabled={null == selectedCategory} >All</Button>
     )
 
     return ( 

@@ -1,0 +1,5 @@
+{
+    "JWT_KEY":"FORUM_JWT",
+    "DB_LOGIN": "FORUM_DB_LOGIN",
+    "DB_PASSWORD" : "FORUM_DB_PASSWORD"
+}

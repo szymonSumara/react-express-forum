@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-
-mongoose.connect(config.get("connection-string"), (error) => {
+console.log(config.get("connection-string").replace('{login}',config.get('DB_LOGIN')).replace('{password}',config.get('DB_PASSWORD')))
+mongoose.connect(config.get("connection-string").replace('{login}',config.get('DB_LOGIN')).replace('{password}',config.get('DB_PASSWORD')), (error) => {
     if(error) return console.log("connection error")
     return console.log("connected");
 })
@@ -21,8 +21,10 @@ app.use("/api/login", require('./routes/loggin'));
 app.use("/api/comment", require('./routes/comment'))
 app.use("/api/reaction", require('./routes/reaction'))
 app.use("/api/category", require('./routes/category'))
+app.use(express.static('public'))
 
+const PORT  = process.env.PORT || 3000;
 
-app.listen(3000, () => {
-    console.log("Start listen on port 3000");
+app.listen(PORT, () => {
+    console.log(`Start listen on port ${PORT}`);
 })

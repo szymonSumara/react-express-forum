@@ -18,7 +18,6 @@ router.post( '' , auth, async (request, response) => {
     let reaction = await Reaction.findOne({userId: user.id, postId: body.postId})
     
     if(reaction){
-        console.log(reaction.positive , body.positive)
         if(reaction.positive != body.positive){
                         
             if(body.positive){

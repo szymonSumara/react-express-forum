@@ -6,7 +6,8 @@ import  * as auth from '../Services/auth'
 function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
     
     let actualReaction = ''
-    if(userReaction) actualReaction = 'positive'
+    console.log(userReaction?.positive)
+    if(userReaction?.positive) actualReaction = 'positive'
     else if( userReaction !== undefined )  actualReaction = 'negative'
 
     const [ reaction, setReaction ] = useState(actualReaction );
@@ -68,18 +69,17 @@ function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
     
     return (  
         <>
-            <div class="row p-2">
-                <div class="col-2">
+            <div className="row p-2">
+                <div className="col-2">
                     <span className="p-2" >{reactionCounts.positive}</span>
                     <BsFillArrowUpCircleFill />
                 </div>
-                <div class="col-2">
+                <div className="col-2">
                     <span className="p-2" >{reactionCounts.negative}</span>
                     <BsArrowDownCircleFill />
                 </div>
-                <div class="col-6"></div>
-
-                <div class="col-1 float-right" onClick={onLike}>
+                <div className="col-6"></div>
+                <div className="col-1 float-right" onClick={onLike}>
                     {
                         reaction !='positive' ?
                             <BsArrowUpCircle size={26}/> 
@@ -87,7 +87,7 @@ function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
                             <BsFillArrowUpCircleFill  size={26}/>
                     }
                 </div>
-                <div class="col-1 float-right" onClick={onDislike}>
+                <div className="col-1 float-right" onClick={onDislike}>
                     {
                         reaction !='negative' ?
                         <BsArrowDownCircle size={26}/> 

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import { FormControl, InputGroup , Form,  } from "react-bootstrap";
+import {  Form,  } from "react-bootstrap";
 import {Person, Key} from 'react-bootstrap-icons'
 import * as auth from '../Services/auth'
 import ErrorLabel from "./Basic/ErrorLabel";
+import Input from "./Basic/Form/Input";
+import Subbmit from "./Basic/Form/Subbmit";
 
 
 function LoginForm(props) {
@@ -24,9 +25,8 @@ function LoginForm(props) {
     e.preventDefault();
 
     const result = await auth.login(login,password);
-    console.log(result)
+
     if(result.ok){
-     //const { state } = props.location;
      window.location =  "/";
     }else{
       setError(result.data);
@@ -37,22 +37,10 @@ function LoginForm(props) {
   return (
         <Form className="p-3 border col-sm-12  col-md-6 col-lg-4 text-center ">
             <h2>Log to forum</h2>
-            <InputGroup  className="mt-3 mb-3 ">
-            <InputGroup.Text ><Person/></InputGroup.Text>
-            <FormControl
-                placeholder="Login"
-                value={login}
-                onChange={updateLogin}
-            />
-            </InputGroup>
-            <InputGroup className="mb-3">
-            <InputGroup.Text ><Key/></InputGroup.Text>
-            <FormControl placeholder="password" type="password" value={password} onChange={updatePassword} />
+            <Input placeholder={"Login"} value={login} onChange={updateLogin} icon={<Person/>}/>
+            <Input placeholder={"Password"} value={password} onChange={updatePassword} type="password" icon={<Key/>}/>
             <ErrorLabel value={error} />
-            </InputGroup>
-            <InputGroup className="mb-3">
-            <Button onClick={onSubmit} className="col-12">Log</Button>
-            </InputGroup>
+            <Subbmit onSubbmit={onSubmit} value="Login"/>
             <Link to="/newAccount"><h6>I dont have account</h6></Link>
         </Form>
   );

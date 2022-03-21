@@ -8,7 +8,8 @@ const { validateAccount, Account }= require('../models/account');
 router.post( '', ( request, response ) => {
 
     const validateError = validateAccount(request.body);
-    if(validateError.error) return response.status(400).send(validateError.error);
+    console.log(validateError.error);
+    if(validateError.error) return response.status(400).send(validateError.error.details[0].message);
     
     const sha256Hasher = crypto.createHash('sha256');
     request.body.password = sha256Hasher.update(request.body.password).digest("hex");

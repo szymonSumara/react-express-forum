@@ -3,13 +3,13 @@ import React, { useState , useEffect} from 'react';
 import { FormControl, InputGroup , Form, Button } from "react-bootstrap";
 import * as auth from '../Services/auth';
 import * as  posts from '../Services/posts'
-import Input from './Basic/Form/input';
-import TextArea from './Basic/Form/textArea';
-import Subbmit from './Basic/Form/subbmit';
-import Select from './Basic/Form/select';
+import Input from './Basic/Form/Input';
+import TextArea from './Basic/Form/TextArea';
+import Subbmit from './Basic/Form/Subbmit';
+import Select from './Basic/Form/Select';
 import  * as  categoryService from '../Services/categories'
 
-function CreateNewPostForm() {
+function NewPostForm() {
     
     
     const [title, setTitle] = useState();
@@ -50,7 +50,6 @@ function CreateNewPostForm() {
 
 
     const onSubmit = () => {
-        const user = auth.getLoggedUser()
         posts.addPost({title, text, categoryId : selectedCategory});        
     }
 
@@ -61,27 +60,11 @@ function CreateNewPostForm() {
                 <Input placeholder={"Title"} value={title} onChange={updateTitle}/>
                 <Select onChange={updateSelectedCategory} options={categories} selectedValue={selectedCategory} placeholder="Chose post category"/>
                 <TextArea placeholder={"Text"} value={text} onChange={updateText}/>
-                <Subbmit onSubbmit={onSubmit}/>
+                <Subbmit onSubbmit={onSubmit} value={"Add new post"}/>
         </Form>
-    {/* <Form className=" mt-3 p-3 border col-sm-12  text-center ">
-        <h3>Create new post</h3>
-        <InputGroup  className="mt-3 mb-3 ">
-        <FormControl
-            placeholder="topic"
-            value={title}
-            onChange={updateTitle}
-        />
-        </InputGroup>
-        <InputGroup className="mb-3">
-        <Form.Control  value={text} onChange={updateText} as="textarea" rows={3} />
-        </InputGroup>
-        <InputGroup className="mb-3">
-        <Button className="col-12" >Add post</Button>
-        </InputGroup>
-    </Form> */}
     </>
 
 );
 }
 
-export default CreateNewPostForm;
+export default NewPostForm;

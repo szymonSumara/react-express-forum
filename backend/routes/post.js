@@ -66,7 +66,6 @@ router.get( '/',async  ( request, response ) => {
     let posts = await buildPosts();
     let beforePaggingCount = null;
     [posts, beforePaggingCount] = filterPosts(posts, request.query);
-    console.log(beforePaggingCount);
     setTimeout( () => { response.status(200).send({
         totalNumber:beforePaggingCount,
         posts:posts},200)})
@@ -81,7 +80,7 @@ router.get( '/:id', async ( request, response ) => {
     const users = await Account.find();
     const comments = await Comment.find({postId : postId})
     const category = await Category.find();
-
+    const reactions = await Reaction.find();
 
 
     const author = users.find( user => {
@@ -95,7 +94,10 @@ router.get( '/:id', async ( request, response ) => {
         author : users.find((u) => u._id?.toString() === post.userId?.toString())?.nick,
         reactions: post.reactions,
         category: category.find(c => post.categoryId == c.id),
-
+        date: post.date,
+        reactionsList : reactions
+        .filter( r =>  post._id?.toString() == r.postId?.toString())
+        .map(r => {return { userId : r.userId, positive: r.positive}}),
         comments : comments.map( (com) => {
             return {
                 text : com.text,

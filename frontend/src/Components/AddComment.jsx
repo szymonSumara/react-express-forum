@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import * as comment from '../Services/comment'
 import {Form, InputGroup, Button} from 'react-bootstrap';
+import Input from './Basic/Form/Input';
+import TextArea from './Basic/Form/TextArea';
+import Subbmit from './Basic/Form/Subbmit';
 
 function AddComment({postId, userId}) {
 
-    // const [post, ] = useState(postId);
-    // const [user, ] = useState(userId);
     const [text, setText] = useState("");
 
     const updateText = (e) => {
@@ -19,16 +20,10 @@ function AddComment({postId, userId}) {
 
 
     return ( <>
-    {postId}
- <Form className=" mt-3 p-3 border col-sm-12  text-center ">
-        <InputGroup className="mb-3">
-        <Form.Control  value={text} onChange={updateText} as="textarea" rows={3} />
-        </InputGroup>
-        <InputGroup className="mb-3">
-        <Button className="col-12" onClick={submit}>Add Comment</Button>
-        </InputGroup>
-    </Form>
-        
+        <Form className=" mt-3 p-3 border col-sm-12  text-center ">
+            <TextArea value={text} onChange={updateText} />
+            <Subbmit  onSubbmit={submit} value={"Add Comment"}/>
+        </Form>    
     </> );
 }
 

@@ -50,8 +50,11 @@ const post = async ( path ,body) => {
       } 
       else{
         const text = await response.text();
-       // toast.error(`POST ${path} \n ${text}`);
-        return text;
+        toast.error(`POST ${path} \n ${text}`);
+        return {
+          ok: false,
+          data:text
+        };
       } 
 }
 

@@ -1,4 +1,5 @@
 {
     "port":3000,
-    "connection-string" : "mongodb+srv://react_forum_user:{password}@cluster0.3qec3.mongodb.net/react_forum?retryWrites=true&w=majority"
+    "connection-string" : "mongodb+srv://{login}:{password}@cluster0.3qec3.mongodb.net/react_forum?retryWrites=true&w=majority",
+
 }

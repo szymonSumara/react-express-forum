@@ -1,0 +1,5 @@
+{
+    "JWT_KEY":"1234",
+    "DB_LOGIN": "test",
+    "DB_PASSWORD" : "test"
+}

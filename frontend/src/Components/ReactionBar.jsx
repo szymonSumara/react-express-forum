@@ -70,30 +70,27 @@ function ReactionBar({positiveCount, negativeCount, postId, userReaction}) {
     return (  
         <>
             <div className="row p-2">
-                <div className="col-2">
-                    <span className="p-2" >{reactionCounts.positive}</span>
-                    <BsFillArrowUpCircleFill />
-                </div>
-                <div className="col-2">
-                    <span className="p-2" >{reactionCounts.negative}</span>
-                    <BsArrowDownCircleFill />
-                </div>
-                <div className="col-6"></div>
-                <div className="col-1 float-right" onClick={onLike}>
+                <div className="col-6"> </div>
+                <div className="col-3 float-right" onClick={onLike}>
                     {
                         reaction !='positive' ?
                             <BsArrowUpCircle size={26}/> 
                         :
                             <BsFillArrowUpCircleFill  size={26}/>
+                            
                     }
+                                        <span className="p-2" >{reactionCounts.positive}</span>
+
                 </div>
-                <div className="col-1 float-right" onClick={onDislike}>
+                <div className="col-3 float-right" onClick={onDislike}>
                     {
                         reaction !='negative' ?
                         <BsArrowDownCircle size={26}/> 
                         :
                         <BsArrowDownCircleFill  size={26}/>
                     }
+                                        <span className="p-2" >{reactionCounts.negative}</span>
+
                 </div>
             
             </div>

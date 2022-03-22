@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
 
 
-const serverUrl = "https://szymon-sumara-forum.herokuapp.com"
+//const serverUrl = "https://szymon-sumara-forum.herokuapp.com"
+const serverUrl = "http://localhost:3000"
 let token;
 const setToken = (t)  => {
   token = t;
@@ -94,12 +95,18 @@ const put = async ( path ,body) => {
      // toast.success(`POST ${path}`)
       const data =  response.json();
       console.log(data);
-      return data;
+      return {
+        ok: true,
+        data
+      };
     } 
     else{
       const text = await response.text();
     //  toast.error(`POST ${path} \n ${text}`);
-      return null;
+      return {
+        ok: false,
+        data:text
+      };
     } 
 }
 

@@ -51,7 +51,7 @@ function RegisterForm() {
       <Input value={login} onChange={changeLogin} placeholder="Login" icon={<Person />}/>
       <Input value={nick} onChange={changeNick} placeholder="Nick" icon={<People />}/>
       <Input value={email} onChange={changeEmail} placeholder="Email" icon={<Mailbox />}/>
-      <Input value={password} onChange={changePassword} placeholder="Password" icon={<Key />}/>
+      <Input value={password} onChange={changePassword} placeholder="Password" type="password" icon={<Key />}/>
       <ErrorLabel value={error} />
       <Subbmit value="Add account" onSubbmit={subbmit}/>
       <Link to="/login">

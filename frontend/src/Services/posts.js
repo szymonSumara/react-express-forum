@@ -14,11 +14,15 @@ export async function getPost(id){
 }
 
 export async function updatePost(id, body){
-    return http.put(`/api/post/${id}`,body);
+    return await http.put(`/api/post/${id}`,body);
 }
 
 export   async function addPost(post){
     return await http.post('/api/post',post); 
+}
+
+export   async function deletePost(id){
+    return await http.delete(`/api/post/${id}`); 
 }
 
 // export   async function deleteSpending(spending){

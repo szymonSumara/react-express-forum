@@ -5,7 +5,7 @@ function Subbmit( {onSubbmit, value} ) {
     console.log(onSubbmit);
     return (        
     <InputGroup className="mb-3">
-        <Button className="col-12" onClick={onSubbmit}>{value}</Button>
+        <Button className="col-12" type="subbmit" onClick={onSubbmit}>{value}</Button>
     </InputGroup>);
 }
 

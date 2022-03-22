@@ -31,6 +31,16 @@ useEffect( () => {
     fetchData();
 });
 
+const onCommentAdd = (text) => {
+    console.log('onCommentAdd', text)
+    if(data.post)
+    if(data.post.comments)
+    setData({
+        post:{...post, comments: [...post.comments, {author:auth.getLoggedUser().nick,text}]},
+        loading:false,
+    })
+}
+
 const currentUserId = auth.getLoggedUser()?.id;
 console.log(currentUserId)
 
@@ -43,7 +53,7 @@ return ( <>
     <>
         <Post post={post} />
         {post.comments.map( (com,index) => {return <Comment key={index} text={com.text} author={com.author}></Comment>})}
-        <AddComment postId={id} userId={auth.getLoggedUser().id} />
+        <AddComment postId={id} userId={auth.getLoggedUser().id} onAddComment={onCommentAdd} />
     </>
     }
 </>);

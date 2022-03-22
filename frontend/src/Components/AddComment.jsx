@@ -5,7 +5,7 @@ import Input from './Basic/Form/Input';
 import TextArea from './Basic/Form/TextArea';
 import Subbmit from './Basic/Form/Subbmit';
 
-function AddComment({postId, userId}) {
+function AddComment({postId, userId, onAddComment}) {
 
     const [text, setText] = useState("");
 
@@ -13,9 +13,10 @@ function AddComment({postId, userId}) {
         setText(e.target.value);
     }
 
-    const submit = () => {
-        console.log(postId);
+    const submit = (e) => {
+        e.preventDefault();
         comment.addComment({postId, userId, text});
+        onAddComment( text);
     }
 
 

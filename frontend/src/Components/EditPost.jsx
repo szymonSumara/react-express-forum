@@ -9,6 +9,7 @@ import * as postService from '../Services/posts'
 import TextArea from './Basic/Form/TextArea';
 import Select from './Basic/Form/Select';
 import * as categoryService from '../Services/categories'
+import ErrorLabel from './Basic/ErrorLabel';
 
 function EditPostForm() {
 
@@ -21,6 +22,8 @@ function EditPostForm() {
         categories: [],
         selectedCategory: null,
     })
+
+    const [error, setError] = useState('');
     
 
     useEffect( async () =>{
@@ -51,9 +54,19 @@ function EditPostForm() {
         setData({...data, text: e.target.value})
     }
 
-    const onSubbmit = (e) => {
-        postService.updatePost(id, {title, text, categoryId: selectedCategory});
-        window.location =  "/";
+    const onSubbmit = async (e) => {
+        e.preventDefault();
+        const result = await postService.updatePost(id, {title, text, categoryId : selectedCategory});        
+        if(result.ok) window.location = "/";
+        else setError(result.data);
+        console.log(result,error)
+    }
+
+    const onDelete = async (e) => {
+        e.preventDefault();
+        await postService.deletePost(id);        
+         window.location = "/";
+
     }
 
     const updateSelectedCategory = (e) => {
@@ -73,7 +86,10 @@ function EditPostForm() {
                 <Input placeholder={"Title"} value={title} onChange={updateTitle}/>
                 <Select options={categories} selectedValue={selectedCategory} onChange={updateSelectedCategory}/>
                 <TextArea placeholder={"Text"} value={text} onChange={updateText}/>
+                <ErrorLabel value={error} />
                 <Subbmit onSubbmit={onSubbmit} value={"Save changes"}/>
+                <Subbmit onSubbmit={onDelete} value={"Delete Post"}/>
+
             </Form>  
         }
 

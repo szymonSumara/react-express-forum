@@ -4,18 +4,16 @@ import {InputGroup} from 'react-bootstrap';
 
 function Select({onChange, options, placeholder, selectedValue}){
     
-    console.log("<Select> :", selectedValue);
+    console.log("Render Select");
 
 
     const actualValue = selectedValue || "DEFOULT";
-    console.log(actualValue)
     return ( 
         <InputGroup  className="mt-3 mb-3 ">
                 <Form.Select size="lg" onChange={onChange} value={actualValue}>
-                { selectedValue && <option value={"DEFOULT"} disabled >{placeholder}</option> }
+                { !selectedValue && <option value={actualValue} disabled >{placeholder}</option> }
                 {
                     options.map( (o,k) => {
-                        console.log(o)
                         return <option key={k} value={o.value}>{o.label}</option>
                     })
                 }

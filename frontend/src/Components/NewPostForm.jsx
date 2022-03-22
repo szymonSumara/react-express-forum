@@ -8,6 +8,7 @@ import TextArea from './Basic/Form/TextArea';
 import Subbmit from './Basic/Form/Subbmit';
 import Select from './Basic/Form/Select';
 import  * as  categoryService from '../Services/categories'
+import ErrorLabel from '../Components/Basic/ErrorLabel'
 
 function NewPostForm() {
     
@@ -15,6 +16,7 @@ function NewPostForm() {
     const [title, setTitle] = useState();
     const [text, setText] = useState();
     const [categories, setCategories] = useState([]);
+    const [error, setError] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
 
 
@@ -49,9 +51,16 @@ function NewPostForm() {
     }
 
 
-    const onSubmit = () => {
-        posts.addPost({title, text, categoryId : selectedCategory});        
+    const onSubmit =  async (e) => {
+        e.preventDefault();
+
+        const result = await posts.addPost({title, text, categoryId : selectedCategory});        
+        if(result.ok) window.location = "/";
+        else setError(result.data);
+        console.log(result,error)
     }
+
+
 
 
     return ( <>
@@ -60,6 +69,7 @@ function NewPostForm() {
                 <Input placeholder={"Title"} value={title} onChange={updateTitle}/>
                 <Select onChange={updateSelectedCategory} options={categories} selectedValue={selectedCategory} placeholder="Chose post category"/>
                 <TextArea placeholder={"Text"} value={text} onChange={updateText}/>
+                <ErrorLabel value={error} />
                 <Subbmit onSubbmit={onSubmit} value={"Add new post"}/>
         </Form>
     </>
